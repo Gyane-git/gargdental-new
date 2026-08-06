@@ -1,0 +1,48 @@
+"use client";
+import { useEffect } from "react";
+import { useProductStore, useCategoryStore, useManufacturerStore } from "@/stores/InitdataFetch";
+import { apiRequest } from "@/utils/ApiSafeCalls";
+import { toast } from "react-hot-toast";
+import { useFreeShippingStore } from "@/stores/ShippingThreshold";
+
+export default function ClientLayout({ children }) {
+  const fetchProducts = useProductStore((s) => s.fetchProducts);
+  const fetchCategories = useCategoryStore((s) => s.fetchCategories);
+  const { fetchManufacturers } = useManufacturerStore();
+  const { setInsideOfValleyThreshold, setOutOfValleyThreshold } = useFreeShippingStore();
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const response = await apiRequest("/settings", false);
+      if (response.success) {
+        const settings = response?.settings || {};
+        const freeShippingThresholdInside = settings.free_shipping_threshold_inside_of_valley || {};
+        const freeShippingThresholdOutside = settings.free_shipping_threshold_out_of_valley || {};
+        const freeShipping_threshold_inside_of_valley = freeShippingThresholdInside?.value || null;
+        const freeShipping_threshold_out_of_valley = freeShippingThresholdOutside?.value || null;
+        if (freeShipping_threshold_inside_of_valley && freeShipping_threshold_out_of_valley && !isNaN(parseFloat(freeShipping_threshold_out_of_valley)) && !isNaN(parseFloat(freeShipping_threshold_inside_of_valley))) {
+          const thresholdInside = parseFloat(freeShipping_threshold_inside_of_valley);
+          const thresholdOutside = parseFloat(freeShipping_threshold_out_of_valley);
+          setInsideOfValleyThreshold(thresholdInside);
+          setOutOfValleyThreshold(thresholdOutside);
+        }
+      } else {
+        // console.error("Failed to fetch settings:", response.error);
+        toast.error(response?.errors?.[0]?.message || response?.message || "Failed to fetch settings");
+
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  useEffect(() => {
+    fetchManufacturers();
+  }, [fetchManufacturers]);
+
+  useEffect(() => {
+    fetchProducts();
+    fetchCategories();
+  }, []);
+
+  return <div className="w-full">{children}</div>;
+}
