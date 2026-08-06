@@ -69,10 +69,10 @@ backups/
 # ==========================
 # Uploads / Storage
 # ==========================
-storage/
-/public/storage/
-/public/uploads/
-/uploads/
+# storage/
+# /public/storage/
+# /public/uploads/
+# /uploads/
 
 # ==========================
 # OS / IDE
