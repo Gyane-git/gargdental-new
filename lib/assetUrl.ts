@@ -13,8 +13,6 @@ import { mediaStoragePath } from "@/lib/mediaStorage";
 //  - the URL is built with the same /storage/{path}/{data} shape; since public/storage is a
 //    real directory, Next.js serves it as a static file with no route handler involved.
 
-const baseUrl = () => (process.env.NEXT_PUBLIC_MEDIA_BASE_URL || process.env.NEXT_PUBLIC_APP_URL || "").replace(/\/+$/, "");
-
 const normalizeStoredPath = (value: string): string => {
   let raw = String(value || "").trim().replace(/\\/g, "/");
   if (!raw) return "";
@@ -59,5 +57,5 @@ export const assetUrl = (value: unknown, folder: string): string | null => {
     return null;
   }
 
-  return `${baseUrl()}/storage/${relativePath}`;
+  return `/storage/${relativePath}`;
 };

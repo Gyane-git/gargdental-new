@@ -15,8 +15,18 @@ function reviewImageFullUrl(imagePath: string | null): string[] {
     images = imagePath;
   }
   const list = Array.isArray(images) ? images : [imagePath];
-  const base = (process.env.NEXT_PUBLIC_MEDIA_BASE_URL || process.env.NEXT_PUBLIC_APP_URL || "").replace(/\/+$/, "");
-  return list.map((img) => `${base}/storage/app/public/${String(img).replace(/^\/+/, "")}`);
+  return list.map((img) => {
+    const normalized = String(img).trim().replace(/\\/g, "/").replace(/^\/+/, "");
+    if (/^https?:\/\//i.test(normalized)) {
+      try {
+        return `/storage/${decodeURIComponent(new URL(normalized).pathname).replace(/^\/+/, "").replace(/^storage\/app\/public\//, "").replace(/^storage\//, "")}`;
+      } catch {
+        return normalized;
+      }
+    }
+
+    return `/storage/${normalized.replace(/^storage\/app\/public\//, "").replace(/^storage\//, "")}`;
+  });
 }
 
 // Ports Reviews::customer() (belongsTo User, Reviews.php:44-47), with the password/remember_token
