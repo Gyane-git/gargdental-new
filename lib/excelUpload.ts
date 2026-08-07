@@ -3,12 +3,13 @@ import path from "path";
 import fs from "fs";
 import { mkdir, readdir } from "fs/promises";
 import { prisma } from "@/lib/prisma";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 // Ported near-verbatim from gargnew's utils/excelUpload.js - this one is schema-agnostic (just
 // products/categories/brands, whose column names already match exactly between both projects),
 // so only the pool.query() calls needed converting to Prisma.
 
-export const IMAGE_UPLOAD_ROOT = path.join(process.cwd(), "public", "images", "uploads");
+export const IMAGE_UPLOAD_ROOT = resolvePublicPath("images", "uploads");
 
 export const PRODUCT_TEMPLATE_HEADERS = [
   "product_name",
@@ -150,8 +151,9 @@ export const normalizeImagePath = (value: unknown): string | null => {
     }
   }
 
+  raw = raw.replace(/^\/+/, "");
   raw = raw.replace(/^public\//, "");
-  if (!raw.startsWith("/")) raw = `/${raw}`;
+  raw = raw.replace(/^storage\//, "");
   return raw.replace(/\/+/g, "/");
 };
 

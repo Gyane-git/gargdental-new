@@ -5,9 +5,10 @@ import { randomUUID } from "crypto";
 import { fetchComplianceRowByKey, parseComplianceValue, upsertCompliance } from "@/lib/complianceHelpers";
 import { requireAdminAuth } from "@/lib/adminAuth";
 import { prisma } from "@/lib/prisma";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 const ABOUT_US_KEY = "about_us";
-const UPLOAD_DIR = path.join(process.cwd(), "public/uploads/about-us");
+const UPLOAD_DIR = resolvePublicPath("uploads", "about-us");
 
 interface AboutUsStory {
   title?: string;
@@ -57,7 +58,7 @@ async function removeUploadedFile(fileUrl: string) {
   if (!fileUrl) return;
   const relativePath = String(fileUrl).replace(/^\/+/, "");
   try {
-    await fs.unlink(path.join(process.cwd(), "public", relativePath));
+    await fs.unlink(path.join(resolvePublicPath(), relativePath));
   } catch {
     // Ignore missing files during cleanup.
   }

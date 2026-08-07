@@ -4,6 +4,7 @@ import path from "path";
 import { randomUUID } from "crypto";
 import { fetchComplianceRowByKey, parseComplianceValue, upsertCompliance } from "@/lib/complianceHelpers";
 import { requireAdminAuth } from "@/lib/adminAuth";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 interface Certification {
   id: string;
@@ -133,7 +134,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: "Description is required." }, { status: 400 });
     }
 
-    const uploadDir = path.join(process.cwd(), "public/uploads/certifications");
+    const uploadDir = resolvePublicPath("uploads", "certifications");
     await fs.mkdir(uploadDir, { recursive: true });
 
     const existingRow = await fetchComplianceRowByKey("medical_certifications");

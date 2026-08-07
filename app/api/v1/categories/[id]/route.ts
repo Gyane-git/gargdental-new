@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdminAuth } from "@/lib/adminAuth";
 import { formatCategoryRows } from "@/lib/categoryTree";
 import { nowForDb } from "@/lib/dbTime";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 // Ports gargnew's app/api/v1/categories/[id]/route.js. This path doesn't exist in Laravel's
 // mobile contract at all (admin-only), so every verb here is gated by requireAdminAuth (gargnew
@@ -169,7 +170,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     if (image && typeof image === "object" && (image as File).size > 0) {
       const buffer = Buffer.from(await (image as File).arrayBuffer());
       const fileName = `${Date.now()}-${(image as File).name}`;
-      const uploadDir = path.join(process.cwd(), "public/uploads");
+      const uploadDir = resolvePublicPath("uploads");
       await mkdir(uploadDir, { recursive: true });
       await writeFile(path.join(uploadDir, fileName), buffer);
       imagePath = `/uploads/${fileName}`;

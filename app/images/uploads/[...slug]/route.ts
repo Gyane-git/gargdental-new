@@ -1,5 +1,5 @@
 import { serveLocalAsset } from "@/lib/serveLocalAsset";
-import path from "path";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 export const runtime = "nodejs";
 
@@ -8,5 +8,5 @@ export async function GET(
   { params }: { params: Promise<{ slug: string[] }> },
 ) {
   const { slug } = await params;
-  return serveLocalAsset(path.join(process.cwd(), "public", "images", "uploads"), slug || []);
+  return serveLocalAsset(resolvePublicPath("images", "uploads"), slug || []);
 }

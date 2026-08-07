@@ -1,4 +1,5 @@
 import path from "path";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 // Single source of truth for where media files live on disk, read by every admin/customer
 // upload route and checked for existence by lib/assetUrl.ts.
@@ -15,6 +16,6 @@ export function mediaStoragePath(): string {
   return (
     process.env.MEDIA_STORAGE_PATH ||
     process.env.LARAVEL_STORAGE_PATH ||
-    path.join(process.cwd(), "public", "storage")
+    resolvePublicPath("storage")
   );
 }

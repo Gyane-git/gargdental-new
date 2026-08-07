@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import path from "path";
 import { fetchComplianceRowByKey, parseComplianceValue, upsertCompliance } from "@/lib/complianceHelpers";
 import { requireAdminAuth } from "@/lib/adminAuth";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 interface Certification {
   id: string;
@@ -87,7 +88,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     }
 
     try {
-      await fs.unlink(path.join(process.cwd(), "public", certification.fileUrl.replace(/^\//, "")));
+      await fs.unlink(path.join(resolvePublicPath(), certification.fileUrl.replace(/^\//, "")));
     } catch {
       // Ignore missing file
     }

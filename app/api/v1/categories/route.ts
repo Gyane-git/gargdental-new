@@ -6,6 +6,7 @@ import { serializeCategoryWithActiveChildren, shouldReturnFlatCategories, format
 import { requireAdminAuth } from "@/lib/adminAuth";
 import { successResponse, serverErrorResponse } from "@/lib/apiResponse";
 import { nowForDb } from "@/lib/dbTime";
+import { resolvePublicPath } from "@/lib/projectPaths";
 
 // Ports CategoryController::get_categories (CategoryController.php:31-50) for the mobile app,
 // PLUS gargnew's admin-mode branch on this SAME endpoint (app/api/v1/categories/route.js) -
@@ -146,7 +147,7 @@ export async function POST(req: NextRequest) {
     if (image && typeof image === "object" && (image as File).size > 0) {
       const buffer = Buffer.from(await (image as File).arrayBuffer());
       const fileName = `${Date.now()}-${(image as File).name}`;
-      const uploadDir = path.join(process.cwd(), "public/uploads");
+      const uploadDir = resolvePublicPath("uploads");
       await mkdir(uploadDir, { recursive: true });
       await writeFile(path.join(uploadDir, fileName), buffer);
       imagePath = `/uploads/${fileName}`;
