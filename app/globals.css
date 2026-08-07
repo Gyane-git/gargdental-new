@@ -1,4 +1,14 @@
-@import "tailwindcss";
+@import "tailwindcss/theme";
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+@source ".";
+@source "../components";
+@source "../lib";
+@source "../utils";
+@source "../stores";
+@source not "../public/storage/_unused_quarantine";
+@source not "../storage/_unused_quarantine";
 
 @keyframes fade-in-out {
   0% {
