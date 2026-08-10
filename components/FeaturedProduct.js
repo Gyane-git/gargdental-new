@@ -145,6 +145,7 @@ export default function ProductShowcase() {
           image_url: resolveProductImage(product),
           description: product.product_description,
           available_quantity: product.available_quantity,
+          stock_quantity: product.stock_quantity,
           unit_info: product.stock_quantity,
           flash_sale: product.flash_sale,
           delivery_days: product.delivery_target_days,

@@ -94,6 +94,7 @@ function TopBrandProductPage() {
             image_url: resolveProductImage(product),
             description: product.product_description,
             available_quantity: product.available_quantity,
+            stock_quantity: product.stock_quantity,
             unit_info: product.unit_info,
             flash_sale: product.flash_sale === 1 || product.flash_sale === "1",
             delivery_days: product.delivery_target_days,
@@ -274,12 +275,25 @@ function ProductCardMain({ product, showDiscount }) {
       )}
       {!product.has_variations && (
         <>
-          <div className="mt-auto w-full">
-            <BuyNow product={product} />
-          </div>
-          <div className="mt-auto w-full">
-            <AddToCart product={product} />
-          </div>
+          {Number(product.available_quantity) > 0 ? (
+            <>
+              <div className="mt-auto w-full">
+                <BuyNow product={product} />
+              </div>
+              <div className="mt-auto w-full">
+                <AddToCart product={product} />
+              </div>
+            </>
+          ) : (
+            <div className="mt-auto w-full">
+              <button
+                disabled
+                className="w-full bg-red-400 text-white py-2 rounded-lg cursor-not-allowed"
+              >
+                Out of Stock
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>

@@ -125,24 +125,26 @@ export default async function ProductPage({ params }) {
                 ({product.review_count})
               </span>
             </div>
-            <div className="flex items-baseline space-x-4 mb-2">
-              <span className="text-2xl font-semibold text-red-600">
-                Rs.{" "}
-                {Number(product.sell_price).toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-              </span>
-              {parseFloat(product.actual_price) >
-                parseFloat(product.sell_price) && (
-                <span className="text-sm text-gray-500 line-through">
-                  {Number(product.actual_price).toLocaleString("en-IN", {
+            {!product.has_variations && (
+              <div className="flex items-baseline space-x-4 mb-2">
+                <span className="text-2xl font-semibold text-red-600">
+                  Rs.{" "}
+                  {Number(product.sell_price).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   })}
                 </span>
-              )}
-            </div>
+                {parseFloat(product.actual_price) >
+                  parseFloat(product.sell_price) && (
+                  <span className="text-sm text-gray-500 line-through">
+                    {Number(product.actual_price).toLocaleString("en-IN", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </span>
+                )}
+              </div>
+            )}
 
             {product.catalogue_url && <CatalogButton product={product} />}
 

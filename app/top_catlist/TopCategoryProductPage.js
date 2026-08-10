@@ -42,6 +42,7 @@ function TopCategoryProductPage() {
             image_url: resolveProductImage(product),
             description: product.product_description,
             available_quantity: product.available_quantity,
+            stock_quantity: product.stock_quantity,
             unit_info: product.unit_info,
             flash_sale: product.flash_sale === 1 || product.flash_sale === "1",
             delivery_days: product.delivery_target_days,
