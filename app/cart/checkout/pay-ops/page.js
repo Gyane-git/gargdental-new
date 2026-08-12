@@ -262,7 +262,9 @@ const itemsWithVat = selectedItems.map((item) => ({
   const handleOrderWallet = async ( amount,
   remarks,
   particulars) => {
-    
+    if (isProcessing) return;
+    setIsProcessing(true);
+
   try {
     const transId = `Tx${generateUniqueId()}`;
     const refId = `Rf${generateUniqueId()}`
@@ -348,9 +350,12 @@ const itemsWithVat = selectedItems.map((item) => ({
 
           document.body.appendChild(form);
           form.submit();
+        } else {
+          setIsProcessing(false);
         }
   } catch (error) {
     // console.error('ConnectIPS Initiate payment error:', error);
+    setIsProcessing(false);
   }
 };
 
@@ -391,10 +396,13 @@ const itemsWithVat = selectedItems.map((item) => ({
             <>
               {connectIPSDescprition}
               <button
-                className="mt-6 w-full bg-blue-900 text-white py-3 rounded font-semibold text-lg hover:bg-blue-800 transition-colors"
+                disabled={isProcessing}
+                className={`mt-6 w-full text-white py-3 rounded font-semibold text-lg transition-colors ${
+                  isProcessing ? "bg-blue-400 cursor-not-allowed" : "bg-blue-900 hover:bg-blue-800"
+                }`}
                 onClick={()=>{handleOrderWallet(total,'test','Goods from GargDental!')}}
               >
-                Pay Now
+                {isProcessing ? "Processing..." : "Pay Now"}
               </button>
             </>
           )}

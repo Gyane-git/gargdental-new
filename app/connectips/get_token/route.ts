@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateIpsToken } from "@/lib/connectIpsToken";
+import { generateIpsLoginToken } from "@/lib/connectIpsToken";
 
 export const runtime = "nodejs";
 
@@ -10,15 +10,13 @@ export const runtime = "nodejs";
 // Called client-side by the storefront checkout pages (cart/checkout/pay-ops,
 // cart/checkout-buy-now/pay-ops) to sign the auto-submit form POSTed to the real ConnectIPS
 // gateway - distinct from /api/v1/payment/ips/validate, which handles the callback afterward.
+// Signs over the whole submitted payload (MERCHANTID..TOKEN=TOKEN, in order) like gargnew's
+// createConnectipsToken did - ConnectIPS re-derives the signature from every form field it
+// receives, not just MERCHANTID/APPID/REFERENCEID/TXNAMT.
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Record<string, unknown>;
-    const merchantId = String(body.MERCHANTID ?? "");
-    const appId = String(body.APPID ?? "");
-    const referenceId = String(body.REFERENCEID ?? "");
-    const txnAmt = body.TXNAMT as number | string;
-
-    const token = generateIpsToken(merchantId, appId, referenceId, txnAmt);
+    const token = generateIpsLoginToken(body);
 
     return NextResponse.json({ TOKEN: token });
   } catch (error) {
