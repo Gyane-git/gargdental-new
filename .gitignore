@@ -2,6 +2,7 @@
 # Dependencies
 # ==========================
 node_modules/
+database-backup
 
 # ==========================
 # Next.js

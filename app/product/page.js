@@ -3,9 +3,13 @@ import { Suspense } from "react";
 
 function Page() {
   return (
-    <Suspense fallback={<>
-      <FullScreenLoader />
-    </>}>
+    <Suspense
+      fallback={
+        <>
+          <FullScreenLoader />
+        </>
+      }
+    >
       <ProductAPIRequest />
     </Suspense>
   );
@@ -50,12 +54,13 @@ const ProductAPIRequest = () => {
   const [errors, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { categories, loadingcategory, errorcategory, fetchCategories } = useCategoryStore();
+  const { categories, loadingcategory, errorcategory, fetchCategories } =
+    useCategoryStore();
 
   const pathname = usePathname();
   const router = useRouter();
   const setSelectedProduct = useSelectedProductStore(
-    (state) => state.setSelectedProduct
+    (state) => state.setSelectedProduct,
   );
 
   const searchParams = useSearchParams();
@@ -69,7 +74,9 @@ const ProductAPIRequest = () => {
   // const [manufacturers, setManufacturers] = useState([]);
   const { manufacturers, loadingmanufacturer, errormanufacturer } =
     useManufacturerStore();
-  const fetchManufacturers = useManufacturerStore((state) => state.fetchManufacturers);
+  const fetchManufacturers = useManufacturerStore(
+    (state) => state.fetchManufacturers,
+  );
 
   const [offset, setOffset] = useState(0);
   const [filterON, setfilterON] = useState(false);
@@ -109,7 +116,7 @@ const ProductAPIRequest = () => {
     if (manufacturerFromUrl && manufacturers.length > 0) {
       // Find manufacturer by ID
       const selected = manufacturers.find(
-        (m) => m.id.toString() === manufacturerFromUrl // convert to string
+        (m) => m.id.toString() === manufacturerFromUrl, // convert to string
       );
       if (selected) {
         setSelectedManufacturer(selected);
@@ -422,9 +429,12 @@ function ProductCardMain({ product, showDiscount }) {
       {product.stock_quantity === 0 &&
         product.available_quantity === 0 &&
         !product.has_variations && (
-          <p className="font-semibold text-[18px] text-red-600">
-            Out of stock !
-          </p>
+          <button
+            disabled
+            className="w-full py-2 rounded-lg bg-gray-400 text-white font-semibold cursor-not-allowed opacity-80"
+          >
+            Out of Stock
+          </button>
         )}
     </div>
   );
