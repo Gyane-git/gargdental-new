@@ -14,7 +14,9 @@ import { mediaStoragePath } from "@/lib/mediaStorage";
 //    real directory, Next.js serves it as a static file with no route handler involved.
 
 const normalizeStoredPath = (value: string): string => {
-  let raw = String(value || "").trim().replace(/\\/g, "/");
+  let raw = String(value || "")
+    .trim()
+    .replace(/\\/g, "/");
   if (!raw) return "";
 
   if (/^https?:\/\//i.test(raw)) {
@@ -44,7 +46,9 @@ export const assetUrl = (value: unknown, folder: string): string | null => {
   const normalizedValue = normalizeStoredPath(String(value || ""));
   if (!normalizedValue) return null;
 
-  const normalizedFolder = String(folder || "").trim().replace(/^\/+|\/+$/g, "");
+  const normalizedFolder = String(folder || "")
+    .trim()
+    .replace(/^\/+|\/+$/g, "");
   const candidates = new Set<string>();
 
   candidates.add(normalizedValue);
@@ -52,10 +56,13 @@ export const assetUrl = (value: unknown, folder: string): string | null => {
     candidates.add(`${normalizedFolder}/${path.basename(normalizedValue)}`);
   }
 
-  const relativePath = [...candidates].find((candidate) => fileExistsOnDisk(candidate));
+  const relativePath = [...candidates].find((candidate) =>
+    fileExistsOnDisk(candidate),
+  );
   if (!relativePath) {
     return null;
   }
 
-  return `/storage/${relativePath}`;
+  // return `/storage/${relativePath}`;
+  return `${process.env.NEXT_PUBLIC_APP_URL}/storage/${relativePath}`;
 };
