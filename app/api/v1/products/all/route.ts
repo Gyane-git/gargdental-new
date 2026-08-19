@@ -30,6 +30,18 @@ import { successResponse, serverErrorResponse } from "@/lib/apiResponse";
  *           type: integer
  *         required: false
  *         description: Rows to skip. Omit for no offset.
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Page number (1-based). Used with per_page as an alternative to limit/offset. Ignored if limit/offset are present.
+ *       - in: query
+ *         name: per_page
+ *         schema:
+ *           type: integer
+ *         required: false
+ *         description: Rows per page. Used with page as an alternative to limit/offset. Ignored if limit/offset are present.
  *     responses:
  *       200:
  *         description: Products fetched successfully. `is_wishlisted` is personalized when a valid bearer token is sent, and false/unpersonalized for anonymous requests.
@@ -45,6 +57,14 @@ import { successResponse, serverErrorResponse } from "@/lib/apiResponse";
  *                   items:
  *                     type: object
  *                     description: Serialized product (lib/productSerializer.ts) plus starting_price and is_wishlisted.
+ *                 pagination:
+ *                   type: object
+ *                   description: Only present when page/per_page were used.
+ *                   properties:
+ *                     total: { type: integer }
+ *                     page: { type: integer }
+ *                     per_page: { type: integer }
+ *                     total_pages: { type: integer }
  *       500:
  *         description: Unexpected server error.
  *         content:
@@ -58,10 +78,29 @@ export async function GET(req: NextRequest) {
     const user = await optionalAuth(req);
     const wishlistCodes = await getWishlistProductCodes(user?.id);
 
+    const where = { status: 1, parent_id: null };
+    const hasLimitOffset = searchParams.has("offset") || searchParams.has("limit");
+    const hasPagePerPage = !hasLimitOffset && (searchParams.has("page") || searchParams.has("per_page"));
+
+    let skip: number | undefined;
+    let take: number | undefined;
+    let page = 1;
+    let perPage = 0;
+
+    if (hasLimitOffset) {
+      if (searchParams.has("offset")) skip = Number(searchParams.get("offset"));
+      if (searchParams.has("limit")) take = Number(searchParams.get("limit"));
+    } else if (hasPagePerPage) {
+      page = Math.max(1, Number(searchParams.get("page")) || 1);
+      perPage = Math.max(1, Number(searchParams.get("per_page")) || 30);
+      skip = (page - 1) * perPage;
+      take = perPage;
+    }
+
     const rows = await prisma.products.findMany({
-      where: { status: 1, parent_id: null },
-      ...(searchParams.has("offset") ? { skip: Number(searchParams.get("offset")) } : {}),
-      ...(searchParams.has("limit") ? { take: Number(searchParams.get("limit")) } : {}),
+      where,
+      ...(skip !== undefined ? { skip } : {}),
+      ...(take !== undefined ? { take } : {}),
     });
 
     const products = await Promise.all(
@@ -71,6 +110,19 @@ export async function GET(req: NextRequest) {
         is_wishlisted: isWishlisted(row.product_code, wishlistCodes),
       })),
     );
+
+    if (hasPagePerPage) {
+      const total = await prisma.products.count({ where });
+      return successResponse("Products fetched successfully", {
+        products,
+        pagination: {
+          total,
+          page,
+          per_page: perPage,
+          total_pages: Math.max(1, Math.ceil(total / perPage)),
+        },
+      });
+    }
 
     return successResponse("Products fetched successfully", { products });
   } catch (error) {
