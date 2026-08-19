@@ -16,8 +16,9 @@ export const ProductCard = ({ product, showDiscount = false }) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
-        className={`w-2 h-2 sm:w-3 sm:h-3 ${i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-          }`}
+        className={`w-2 h-2 sm:w-3 sm:h-3 ${
+          i < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+        }`}
       />
     ));
   };
@@ -59,15 +60,16 @@ export const ProductCard = ({ product, showDiscount = false }) => {
           <div className="flex items-center space-x-1 sm:space-x-2 mb-2 cursor-pointer">
             {parseFloat(product.actual_price) >
               parseFloat(product.sell_price) && (
-                <span className="text-sm text-gray-500 line-through">
-                  {Number(product.actual_price).toLocaleString("en-IN", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </span>
-              )}
+              <span className="text-sm text-gray-500 line-through">
+                {Number(product.actual_price).toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            )}
             <span className="text-sm sm:text-base font-bold text-red-600">
-              Rs. {Number(product.sell_price).toLocaleString("en-IN", {
+              Rs.{" "}
+              {Number(product.sell_price).toLocaleString("en-IN", {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               })}
@@ -116,10 +118,7 @@ const FeatureCard = ({ icon: Icon, title, description }) => (
 );
 
 export default function ProductShowcase() {
-
-
   const [featuredProducts, setProducts] = useState([]);
-
 
   useEffect(() => {
     const fetchaLatestProducts = async () => {
@@ -185,11 +184,7 @@ export default function ProductShowcase() {
         </div>
 
         {/* Featured Products */}
-        <ProductSection
-          title="LATEST Products"
-          products={featuredProducts}
-          showDiscount={true}
-        />
+        <ProductSection products={featuredProducts} showDiscount={true} />
 
         <WeeklySpecial />
 
@@ -212,7 +207,7 @@ export default function ProductShowcase() {
           />
 
           <FeatureCard
-            icon={Mail  }
+            icon={Mail}
             title="Credit Order"
             description="Contact us to place your credit order"
           />
