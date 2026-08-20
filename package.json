@@ -9,8 +9,7 @@
     "lint": "next lint",
     "prisma:pull": "prisma db pull",
     "prisma:generate": "prisma generate",
-    "postinstall": "prisma generate && next build && node scripts/sync-next-static.js",
-    "postbuild": "node scripts/sync-next-static.js"
+    "postinstall": "prisma generate && next build"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-react": "^11.2.0",
