@@ -257,7 +257,7 @@ const HeaderBarNew = () => {
                 <Link href="/dashboard" className="hover:underline font-bold hover:text-[#1FA2FF] hover:scale-105 transition-all duration-200 cursor-pointer">
                   Home
                 </Link>
-                <Link href="/product" className="hover:underline font-semibold hover:text-[#1FA2FF] hover:scale-105 transition-all duration-200 cursor-pointer">
+                <Link href="/products" className="hover:underline font-semibold hover:text-[#1FA2FF] hover:scale-105 transition-all duration-200 cursor-pointer">
                   Browse Products
                 </Link>
                 <Link href="/hot-sales" className="hover:underline font-semibold hover:text-[#1FA2FF] hover:scale-105 transition-all duration-200 cursor-pointer">
