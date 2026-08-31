@@ -153,28 +153,9 @@ interface MailMessage {
 const buildMessage = ({ from, to, subject, text, html }: MailMessage) => {
   const boundary = `garg-${Date.now()}`;
 
-  return [
-    `From: ${from}`,
-    `To: ${to}`,
-    `Subject: ${subject}`,
-    "MIME-Version: 1.0",
-    `Content-Type: multipart/alternative; boundary="${boundary}"`,
-    "",
-    `--${boundary}`,
-    'Content-Type: text/plain; charset="UTF-8"',
-    "Content-Transfer-Encoding: 7bit",
-    "",
-    text,
-    "",
-    `--${boundary}`,
-    'Content-Type: text/html; charset="UTF-8"',
-    "Content-Transfer-Encoding: 7bit",
-    "",
-    html,
-    "",
-    `--${boundary}--`,
-    "",
-  ].join("\r\n");
+  return [`From: ${from}`, `To: ${to}`, `Subject: ${subject}`, "MIME-Version: 1.0", `Content-Type: multipart/alternative; boundary="${boundary}"`, "", `--${boundary}`, 'Content-Type: text/plain; charset="UTF-8"', "Content-Transfer-Encoding: 7bit", "", text, "", `--${boundary}`, 'Content-Type: text/html; charset="UTF-8"', "Content-Transfer-Encoding: 7bit", "", html, "", `--${boundary}--`, ""].join(
+    "\r\n",
+  );
 };
 
 // Sends using an already-resolved SmtpConfig - shared by sendMail() (loads config itself) and the
@@ -292,12 +273,7 @@ const itemsTable = (items: OrderEmailItem[]) => `
   </table>
 `;
 
-export const sendOrderConfirmationEmail = async (
-  email: string,
-  orderId: string,
-  items: OrderEmailItem[],
-  grandTotal: number,
-) => {
+export const sendOrderConfirmationEmail = async (email: string, orderId: string, items: OrderEmailItem[], grandTotal: number) => {
   await sendMail({
     to: email,
     subject: `Garg Dental order #${orderId} confirmed`,
@@ -345,10 +321,7 @@ export const sendContactFormAckEmail = async (email: string, name: string) => {
   });
 };
 
-export const sendContactFormNotificationEmail = async (
-  adminEmail: string,
-  submission: { name: string; email: string; message: string },
-) => {
+export const sendContactFormNotificationEmail = async (adminEmail: string, submission: { name: string; email: string; message: string }) => {
   await sendMail({
     to: adminEmail,
     subject: `New contact form submission from ${submission.name}`,

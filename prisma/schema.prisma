@@ -1,10 +1,5 @@
 generator client {
   provider      = "prisma-client-js"
-  // "native" keeps this Windows dev machine working; the rhel-openssl targets cover
-  // AlmaLinux/CloudLinux-family cPanel hosts (3.0.x for newer OpenSSL, 1.0.x as a fallback for
-  // older CloudLinux 7-based hosts) - `next build`'s output tracing bundles whichever binaries
-  // are listed here into .next/standalone, so the deployed app doesn't need `prisma generate`
-  // run again on the server.
   binaryTargets = ["native", "rhel-openssl-3.0.x", "rhel-openssl-1.0.x"]
 }
 
