@@ -18,10 +18,7 @@ function remotePatternFor(envUrl: string | undefined) {
   }
 }
 
-const dynamicPatterns = [
-  remotePatternFor(process.env.NEXT_PUBLIC_MEDIA_BASE_URL),
-  remotePatternFor(process.env.NEXT_PUBLIC_APP_URL),
-].filter((p): p is NonNullable<typeof p> => p !== null);
+const dynamicPatterns = [remotePatternFor(process.env.NEXT_PUBLIC_MEDIA_BASE_URL), remotePatternFor(process.env.NEXT_PUBLIC_APP_URL)].filter((p): p is NonNullable<typeof p> => p !== null);
 
 const nextConfig: NextConfig = {
   output: "standalone",
@@ -64,9 +61,7 @@ const nextConfig: NextConfig = {
     return config;
   },
 
-  allowedDevOrigins: [
-    dynamicPatterns.find((p) => p.hostname !== "localhost")?.hostname,
-  ].filter((h): h is string => Boolean(h)),
+  allowedDevOrigins: [dynamicPatterns.find((p) => p.hostname !== "localhost")?.hostname].filter((h): h is string => Boolean(h)),
 
   // Google OAuth / popup communication
   headers: async () => [
