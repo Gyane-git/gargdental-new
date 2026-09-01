@@ -52,7 +52,6 @@ export const assetUrl = (value: unknown, folder: string): string | null => {
     return null;
   }
 
-  // Use same-origin paths so production does not depend on a matching NEXT_PUBLIC_APP_URL.
-  // Next/Image and regular <img> tags can resolve these URLs on whatever host serves the app.
-  return `/storage/${relativePath}`;
+  // return `/storage/${relativePath}`;
+  return `${process.env.NEXT_PUBLIC_APP_URL}/storage/${relativePath}`;
 };
