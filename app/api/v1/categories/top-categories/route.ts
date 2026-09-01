@@ -1,5 +1,8 @@
-import { prisma } from "@/lib/prisma";
+// import { prisma } from "@/lib/prisma";
 import { serializeCategoryWithActiveChildren } from "@/lib/categoryTree";
+// import { successResponse, serverErrorResponse } from "@/lib/apiResponse";
+import { prisma } from "@/lib/prisma";
+import { serializeTopCategoriesWithProducts } from "@/lib/categoryTree";
 import { successResponse, serverErrorResponse } from "@/lib/apiResponse";
 
 // Ports CategoryController::get_top_categories (CategoryController.php:71-90).
@@ -33,8 +36,7 @@ import { successResponse, serverErrorResponse } from "@/lib/apiResponse";
  */
 export async function GET() {
   try {
-    const topLevel = await prisma.categories.findMany({ where: { status: 1, top: 1, parent_id: null } });
-    const categories = await Promise.all(topLevel.map((c) => serializeCategoryWithActiveChildren(c.id)));
+    const categories = await serializeTopCategoriesWithProducts();
     return successResponse("Categories fetched successfully.", { categories });
   } catch (error) {
     console.error("Exception occurred while fetching categories", error);
