@@ -31,9 +31,10 @@ export default function SetupPage() {
       try {
         const res = await fetch("/api/v1/clinic/clinic-setup");
         const data = await res.json();
+
         if (!data.success) throw new Error(data.message || "Failed to load setup");
 
-        const clinicMap = Object.fromEntries((data.clinic || []).map((item) => [item.key, item]));
+        const clinicMap = data.clinic || {};
 
         const cover = clinicMap.clinic_cover_image?.clinic_cover_image_full_url || "";
         setCurrentCoverImage(cover);

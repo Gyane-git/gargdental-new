@@ -73,7 +73,7 @@ export const metadata = {
     "top dental brands Nepal",
   ],
   icons: {
-    icon: "logo.ico",
+    icon: "/logo.ico",
   },
 
   openGraph: {
