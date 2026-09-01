@@ -95,8 +95,29 @@ export default function ChangePassword({ onSubmit, saving = false }) {
 
       {/* Button */}
       <div className="flex justify-center pt-2">
-        <button type="submit" disabled={saving} className="rounded-md bg-[#4154f1] px-8 py-2.5 text-white font-medium hover:bg-[#3145e5] transition disabled:opacity-60 disabled:cursor-not-allowed">
-          {saving ? "Updating..." : "Change Password"}
+        <button
+          type="submit"
+          disabled={saving}
+          className={`rounded-md px-8 py-2.5 font-medium text-white transition-all duration-200 flex items-center justify-center gap-2
+    ${saving ? "bg-[#5264f3] cursor-not-allowed opacity-90" : "bg-[#4154f1] hover:bg-[#3145e5] hover:shadow-lg hover:shadow-indigo-200 active:scale-[0.98]"}`}
+        >
+          {saving ? (
+            <>
+              {/* Spinner */}
+              <svg className="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+              </svg>
+
+              <span>Updating...</span>
+            </>
+          ) : (
+            <>
+              <span>Change Password</span>
+              <span className="text-lg">→</span>
+            </>
+          )}
         </button>
       </div>
     </form>

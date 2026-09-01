@@ -82,9 +82,8 @@ const menuItems = [
         name: "Add Product",
         path: "/admin/products/add",
         icon: Users,
-        
       },
-      { name: "Product-list", path: "/admin/products", icon: UserPlus, },
+      { name: "Product-list", path: "/admin/products", icon: UserPlus },
     ],
   },
   {
@@ -97,13 +96,11 @@ const menuItems = [
         name: "Add Category",
         path: "/admin/categories/add",
         icon: FileText,
-        
       },
       {
         name: "Category-list",
         path: "/admin/categories",
         icon: Bell,
-        
       },
     ],
   },
@@ -113,7 +110,7 @@ const menuItems = [
     path: "#",
     expandable: true,
     children: [
-      { name: "Add Brand", path: "/admin/brands/add", icon: Globe, },
+      { name: "Add Brand", path: "/admin/brands/add", icon: Globe },
       { name: "Brand-list", path: "/admin/brands", icon: Plus },
     ],
   },
@@ -124,12 +121,12 @@ const menuItems = [
     expandable: true,
     children: [
       { name: "Add-Banner", path: "/admin/banners/add", icon: Users },
-      { name: "Banner List", path: "/admin/banners", icon: Users, },
+      { name: "Banner List", path: "/admin/banners", icon: Users },
     ],
   },
   {
     icon: Award,
-    label: "Offers",
+    label: "Offer Banners",
     path: "/admin/offer-banners",
   },
   {
@@ -142,7 +139,6 @@ const menuItems = [
         name: "Processing-list",
         path: "/admin/orders/processing",
         icon: Clock,
-        
       },
       { name: "Shipping-list", path: "/admin/orders/shipped", icon: Calendar },
       {
@@ -168,7 +164,6 @@ const menuItems = [
         name: "Setup Page",
         path: "/admin/manage-clinical-setup/Setup-page",
         icon: MessageSquare,
-        
       },
       {
         name: "Setup Request List",
@@ -330,9 +325,7 @@ const EducationSidebar = ({ adminRole = "" }) => {
   const isActive = (path) => pathname === path;
   const canShowItem = (item: SidebarItem) => {
     if (item.expandable && item.children) {
-      return item.children.some((child) =>
-        canAccessAdminPath(child.path, adminRole),
-      );
+      return item.children.some((child) => canAccessAdminPath(child.path, adminRole));
     }
 
     return canAccessAdminPath(item.path, adminRole);
@@ -348,89 +341,45 @@ const EducationSidebar = ({ adminRole = "" }) => {
           const Icon = item.icon;
           const active = isActive(item.path) && !item.expandable;
           const expanded = expandedItems[item.label];
-          const visibleChildren = item.children?.filter((child) =>
-            canAccessAdminPath(child.path, adminRole),
-          );
+          const visibleChildren = item.children?.filter((child) => canAccessAdminPath(child.path, adminRole));
           const hasNotification = visibleChildren?.some((c) => c.count);
 
           return (
             <div key={item.label}>
               {/* Parent row */}
-              <div
-                onClick={() => item.expandable && toggleExpand(item.label)}
-                className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer group transition-colors duration-150 ${active ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}
-              >
-                <Link
-                  href={item.path === "#" ? "#" : item.path}
-                  className="flex items-center gap-3 flex-1 min-w-0"
-                  onClick={(e) => item.path === "#" && e.preventDefault()}
-                >
+              <div onClick={() => item.expandable && toggleExpand(item.label)} className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer group transition-colors duration-150 ${active ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}>
+                <Link href={item.path === "#" ? "#" : item.path} className="flex items-center gap-3 flex-1 min-w-0" onClick={(e) => item.path === "#" && e.preventDefault()}>
                   <div className="relative shrink-0">
-                    <Icon
-                      className={`w-4 h-4 ${active ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"}`}
-                    />
-                    {hasNotification && (
-                      <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full" />
-                    )}
+                    <Icon className={`w-4 h-4 ${active ? "text-blue-600" : "text-gray-400 group-hover:text-gray-600"}`} />
+                    {hasNotification && <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-red-500 rounded-full" />}
                   </div>
                   <div className="min-w-0">
-                    <span className="text-sm font-medium truncate block">
-                      {item.label}
-                    </span>
-                    {item.description && (
-                      <span className="text-xs text-gray-400 truncate block">
-                        {item.description}
-                      </span>
-                    )}
+                    <span className="text-sm font-medium truncate block">{item.label}</span>
+                    {item.description && <span className="text-xs text-gray-400 truncate block">{item.description}</span>}
                   </div>
                 </Link>
 
-                {item.expandable && (
-                  <span className="shrink-0 ml-1 text-gray-400">
-                    {expanded ? (
-                      <ChevronDown className="w-3.5 h-3.5" />
-                    ) : (
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    )}
-                  </span>
-                )}
+                {item.expandable && <span className="shrink-0 ml-1 text-gray-400">{expanded ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}</span>}
               </div>
 
               {/* Children */}
-              {item.expandable &&
-                expanded &&
-                visibleChildren &&
-                visibleChildren.length > 0 && (
-                  <div className="ml-4 pl-3 border-l border-gray-200 mt-0.5 mb-1 space-y-0.5">
-                    {visibleChildren.map((child) => {
-                      const ChildIcon = child.icon;
-                      const childActive = isActive(child.path);
-                      return (
-                        <Link
-                          key={child.path}
-                          href={child.path}
-                          className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 ${childActive ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"}`}
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0">
-                            {ChildIcon && (
-                              <ChildIcon
-                                className={`w-3.5 h-3.5 shrink-0 ${childActive ? "text-blue-500" : "text-gray-400"}`}
-                              />
-                            )}
-                            <span className="truncate">{child.name}</span>
-                          </div>
-                          {child.count && (
-                            <span
-                              className={`text-xs font-semibold px-1.5 py-0.5 rounded-full shrink-0 ml-1 ${childActive ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-500"}`}
-                            >
-                              {child.count}
-                            </span>
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
+              {item.expandable && expanded && visibleChildren && visibleChildren.length > 0 && (
+                <div className="ml-4 pl-3 border-l border-gray-200 mt-0.5 mb-1 space-y-0.5">
+                  {visibleChildren.map((child) => {
+                    const ChildIcon = child.icon;
+                    const childActive = isActive(child.path);
+                    return (
+                      <Link key={child.path} href={child.path} className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-colors duration-150 ${childActive ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"}`}>
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          {ChildIcon && <ChildIcon className={`w-3.5 h-3.5 shrink-0 ${childActive ? "text-blue-500" : "text-gray-400"}`} />}
+                          <span className="truncate">{child.name}</span>
+                        </div>
+                        {child.count && <span className={`text-xs font-semibold px-1.5 py-0.5 rounded-full shrink-0 ml-1 ${childActive ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-500"}`}>{child.count}</span>}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
