@@ -1,11 +1,7 @@
 import Toast from "@/components/Toast";
 import { Toaster } from "react-hot-toast";
 import { ToastContainer } from "react-toastify";
-import FooterBar from "@/components/FooterBar";
 import "./globals.css";
-import HeaderBarNew from "@/components/HeaderBarNew";
-import TawkToWidget from "@/components/TawkToWidget";
-import CookieConsentBanner from "@/components/CookieConsentBanner";
 import ClientLayout from "./ClientLayout";
 import LayoutWrapper from "@/components/LayoutWrapper";
 
